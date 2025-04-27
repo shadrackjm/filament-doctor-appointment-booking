@@ -6,6 +6,10 @@
 @source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 
+/* Preline UI */
+@import "../../node_modules/preline/variants.css";
+@source "../../node_modules/preline/dist/*.js";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {

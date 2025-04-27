@@ -50,6 +50,9 @@ class DoctorResource extends Resource
                             ->dehydrated(fn ($state) => filled($state))
                             
                     ]),
+                    Forms\Components\TextInput::make('hospital_name')
+                        ->label('Hospital Name')
+                        ->required(),
                     Forms\Components\Select::make('speciality_id')
                         ->relationship('speciality', 'name')
                         ->searchable()
@@ -92,6 +95,10 @@ class DoctorResource extends Resource
                     ->label('Speciality')
                     ->searchable()
                     ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('hospital_name')
+                    ->label('Hospital Name')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('experience')
                     ->numeric()
