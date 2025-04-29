@@ -105,23 +105,23 @@ class BookingComponent extends Component
         $newAppointment->appointment_type = $this->appointment_type;
         $newAppointment->save();
 
-        $appointmentEmailData = [
-            'date' => $this->selectedDate,
-            'time' => Carbon::parse($slot)->format('H:i A'),
-            'location' => '123 Medical Street, Health City',
-            'patient_name' => auth()->user()->name,
-            'patient_email' => auth()->user()->email,
-            'doctor_name' => $this->doctor_details->user->name,
-            'doctor_email' => $this->doctor_details->user->email,
-            'appointment_type' => $this->appointment_type == 0 ? 'on-site' : 'live consultation',
-            'doctor_specialization' => $this->doctor_details->speciality->name,
-        ];
+        // $appointmentEmailData = [
+        //     'date' => $this->selectedDate,
+        //     'time' => Carbon::parse($slot)->format('H:i A'),
+        //     'location' => '123 Medical Street, Health City',
+        //     'patient_name' => auth()->user()->name,
+        //     'patient_email' => auth()->user()->email,
+        //     'doctor_name' => $this->doctor_details->user->name,
+        //     'doctor_email' => $this->doctor_details->user->email,
+        //     'appointment_type' => $this->appointment_type == 0 ? 'on-site' : 'live consultation',
+        //     'doctor_specialization' => $this->doctor_details->speciality->name,
+        // ];
         // dd($appointmentEmailData);
         // $this->sendAppointmentNotification($appointmentEmailData);
 
         // session()->flash('message','appointment with Dr.'.$this->doctor_details->doctorUser->name.' on '.$this->selectedDate.$slot.' was created!');
 
-        return $this->redirect('/my/appointments',navigate: true);
+        // return $this->redirect('/my/appointments',navigate: true);
     }
     public function render()
     {
