@@ -13,7 +13,7 @@
             </svg>
         </span>
     @else
-        <img class="inline-block size-[62px] rounded-full" src="{{ Storage::url($doctor_details->image)}}"
+        <img class="inline-block size-[62px] rounded-full" src="{{ Storage::url($doctor_details->image) }}"
             alt="Image Description">
     @endif
 </div>

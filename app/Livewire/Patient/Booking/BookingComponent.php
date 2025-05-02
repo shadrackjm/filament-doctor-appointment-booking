@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use Livewire\Component;
 use App\Models\Appointment;
 use App\Models\DoctorSchedule;
+use App\Models\Patient;
 
 class BookingComponent extends Component
 {
@@ -96,9 +97,10 @@ class BookingComponent extends Component
     }
 
     public function bookAppointment($slot){
+        $patient = Patient::where('user_id', auth()->user()->id)->first();
         $carbonDate = Carbon::parse($this->selectedDate)->format('Y-m-d');
         $newAppointment = new Appointment();
-        $newAppointment->patient_id = auth()->user()->id;
+        $newAppointment->patient_id = $patient->id;
         $newAppointment->doctor_id = $this->doctor_details->id;
         $newAppointment->appointment_date = $carbonDate;
         $newAppointment->appointment_time = $slot;

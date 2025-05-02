@@ -9,7 +9,7 @@
      <!-- Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
       <div class="text-center">
-        <livewire:patient.profile.profile-image :id="$doctor_details->user->id"/>
+        <livewire:patient.profile.profile-image :id="$doctor_details->id"/>
         <div class="mt-2 sm:mt-4">
           <h3 class="text-sm font-medium text-gray-800 sm:text-base lg:text-lg dark:text-neutral-200">
             {{$doctor_details->user->name}}

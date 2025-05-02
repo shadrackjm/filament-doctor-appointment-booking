@@ -12,7 +12,7 @@ class ProfileImage extends Component
 
     public function mount($id){
         $this->doctor_details = Doctor::find($id);
-
+        // dd($this->doctor_details);
     }
     public function render()
     {

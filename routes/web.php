@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Patient\Appointments\MyAppointments;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Appearance;
@@ -22,4 +23,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 Route::get('booking/page/{id}', BookingComponent::class);
+
+Route::get('/my-appointments',MyAppointments::class)->name('appointments');
 require __DIR__.'/auth.php';

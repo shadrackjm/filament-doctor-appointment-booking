@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('appointment', function (Blueprint $table) {
-            $table->enum('appointment_type', ['onsite', 'live-consultation'])->after('status');
+        Schema::table('appointments', function (Blueprint $table) {
+            $table->enum('appointment_type', ['onsite', 'live-consultation'])->nullable()->after('status');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('appointment', function (Blueprint $table) {
+        Schema::table('appointments', function (Blueprint $table) {
             $table->dropColumn('appointment_type');
         });
     }
