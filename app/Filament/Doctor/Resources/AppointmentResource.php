@@ -2,16 +2,17 @@
 
 namespace App\Filament\Doctor\Resources;
 
-use App\Filament\Doctor\Resources\AppointmentResource\Pages;
-use App\Filament\Doctor\Resources\AppointmentResource\RelationManagers;
-use App\Models\Appointment;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Doctor;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Appointment;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Doctor\Resources\AppointmentResource\Pages;
+use App\Filament\Doctor\Resources\AppointmentResource\RelationManagers;
 
 class AppointmentResource extends Resource
 {
@@ -40,13 +41,22 @@ class AppointmentResource extends Resource
 
     public static function table(Table $table): Table
     {
+        
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $doctorId = Doctor::where('user_id', auth()->user()->id)->first()->id;
+                $query->where('doctor_id', $doctorId);
+            })
             ->columns([
-                Tables\Columns\TextColumn::make('doctor_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('patient_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('doctor.user.name')
+                    ->label('Doctor Name')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('patient.name')
+                    ->label('Patient Name')
+                    ->searchable()
+                    ->sortable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('appointment_date')
                     ->date()

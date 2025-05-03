@@ -42,11 +42,14 @@ class AppointmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('doctor_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('doctor.user.name')
+                    ->label('Doctor Name')
+                    ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('patient_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('patient.name')
+                    ->label('Patient Name')
+                    ->searchable()
+                    ->sortable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('appointment_date')
                     ->date()

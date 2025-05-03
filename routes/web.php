@@ -25,4 +25,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('booking/page/{id}', BookingComponent::class);
 
 Route::get('/my-appointments',MyAppointments::class)->name('appointments');
+
+Route::get('/reschedule/{appointment_id}', \App\Livewire\Patient\Appointments\RescheduleForm::class)->name('reschedule');
 require __DIR__.'/auth.php';

@@ -8,6 +8,8 @@ use App\Models\Doctor;
 use Livewire\Component;
 use App\Models\Appointment;
 use Livewire\WithPagination;
+use Masmerise\Toaster\Toaster;
+use Illuminate\Support\Facades\Auth;
 
 class MyAppointments extends Component
 {
@@ -15,44 +17,40 @@ class MyAppointments extends Component
     use WithPagination;
     public $perPage = 5;
     public $search = '';
+    public $user;
+
+    public function mount()
+    {
+        $this->user = Auth::user();
+    }
 
     public function cancel($id){
-        $cancelled_by_details = auth()->user();
+        // $cancelled_by_details = ;
         $appointment = Appointment::find($id);
 
         $patient = User::find($appointment->patient_id);
         $doctor = Doctor::find($appointment->doctor_id);
 
-
-        $appointmentEmailData = [
-            'date' => $appointment->appointment_date,
-            'time' => Carbon::parse($appointment->appointment_time)->format('H:i A'),
-            'location' => '123 Medical Street, Health City',
-            'patient_name' => $patient->name,
-            'patient_email' => $patient->email,
-            'doctor_name' => $doctor->doctorUser->name,
-            'doctor_email' => $doctor->doctorUser->email,
-            'doctor_specialization' => $doctor->speciality->speciality_name,
-            'cancelled_by' => $cancelled_by_details->name,
-            'role' => $cancelled_by_details->role,
-        ];
-        // dd($appointmentEmailData);
-        $this->sendAppointmentNotification($appointmentEmailData);
+        // $appointmentEmailData = [
+        //     'date' => $appointment->appointment_date,
+        //     'time' => Carbon::parse($appointment->appointment_time)->format('H:i A'),
+        //     'location' => '123 Medical Street, Health City',
+        //     'patient_name' => $patient->name,
+        //     'patient_email' => $patient->email,
+        //     'doctor_name' => $doctor->doctorUser->name,
+        //     'doctor_email' => $doctor->doctorUser->email,
+        //     'doctor_specialization' => $doctor->speciality->speciality_name,
+        //     'cancelled_by' => $cancelled_by_details->name,
+        //     'role' => $cancelled_by_details->role,
+        // ];
+        // // dd($appointmentEmailData);
+        // $this->sendAppointmentNotification($appointmentEmailData);
 
         $appointment->delete();
 
-        // session()->flash('message','Appointment cancelled successfully');
-        // if (auth()->user()->role == 0) {
-        //     return $this->redirect('/my/appointments', navigate: true);
-        // }
+        Toaster::success('Appointment cancelled successfully!');
 
-        // if (auth()->user()->role == 2) {
-        //     return $this->redirect('/admin/appointments', navigate: true);
-        // }
-
-        // if (auth()->user()->role == 1) {
-        //     return $this->redirect('/doctor/appointments', navigate: true);
-        // }
+        return $this->redirect('/my-appointments');
     }
 
     public function start($appointment_id){
@@ -79,11 +77,10 @@ class MyAppointments extends Component
     // }
     public function render()
     {
-        $user = auth()->user();
         return view('livewire.patient.appointments.my-appointments',[
             'all_appointments' => Appointment::search($this->search)
             ->with('patient','doctor')
-            ->where('patient_id',$user->id)
+            ->where('patient_id',$this->user->id)
             ->paginate($this->perPage)
         ]);
     }

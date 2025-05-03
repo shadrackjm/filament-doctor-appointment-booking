@@ -4,10 +4,13 @@ namespace App\Livewire\Patient\Booking;
 
 use Carbon\Carbon;
 use App\Models\Doctor;
+use App\Models\Patient;
 use Livewire\Component;
 use App\Models\Appointment;
+use Masmerise\Toaster\Toast;
 use App\Models\DoctorSchedule;
-use App\Models\Patient;
+use Masmerise\Toaster\Toaster;
+use Illuminate\Support\Facades\Auth;
 
 class BookingComponent extends Component
 {
@@ -97,7 +100,7 @@ class BookingComponent extends Component
     }
 
     public function bookAppointment($slot){
-        $patient = Patient::where('user_id', auth()->user()->id)->first();
+        $patient = Patient::where('user_id', Auth::user()->id)->first();
         $carbonDate = Carbon::parse($this->selectedDate)->format('Y-m-d');
         $newAppointment = new Appointment();
         $newAppointment->patient_id = $patient->id;
@@ -122,8 +125,8 @@ class BookingComponent extends Component
         // $this->sendAppointmentNotification($appointmentEmailData);
 
         // session()->flash('message','appointment with Dr.'.$this->doctor_details->doctorUser->name.' on '.$this->selectedDate.$slot.' was created!');
-
-        // return $this->redirect('/my/appointments',navigate: true);
+        Toaster::success('Appointment with Dr.'.$this->doctor_details->user->name.' on '.$this->selectedDate.' at '.$slot.' was created!');
+        return $this->redirect('/my-appointments');
     }
     public function render()
     {
