@@ -95,7 +95,7 @@
                         </td>
                             <td class="size-px whitespace-nowrap align-top">
                               <a class="block p-6" >
-                                <span class="text-sm text-gray-600 dark:text-neutral-400">{{ $appointment->appointment_type == 0 ? 'On site' : 'Live Consultation'}}</span>
+                                <span class="text-sm text-gray-600 dark:text-neutral-400">{{ $appointment->appointment_type == 'onsite' ? 'On site' : 'Live Consultation'}}</span>
                               </a>
                             </td>
                             <td class="size-px whitespace-nowrap align-top">

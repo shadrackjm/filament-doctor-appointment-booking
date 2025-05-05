@@ -72,7 +72,7 @@
   @endif
 
     <a class="col-span-full lg:col-span-1 group flex flex-col justify-center text-center rounded-xl p-6 border border-dashed border-gray-200 hover:shadow-sm dark:border-neutral-700"
-      href="/all/doctors">
+      href="{{ auth()->check() ? '/all/doctors' : '/login'}}">
       <h3 class="text-lg text-gray-800 dark:text-neutral-200">Explore More!</h3>
       <div>
         <span

@@ -129,7 +129,7 @@ class BookingComponent extends Component
             'patient_email' => auth()->user()->email,
             'doctor_name' => $this->doctor_details->user->name,
             'doctor_email' => $this->doctor_details->user->email,
-            'appointment_type' => $this->appointment_type == 0 ? 'on-site' : 'live consultation',
+            'appointment_type' => $this->appointment_type == 'onsite' ? 'on-site' : 'live consultation',
             'doctor_specialization' => $this->doctor_details->speciality->name,
         ];
         $this->sendAppointmentNotification($appointmentEmailData);

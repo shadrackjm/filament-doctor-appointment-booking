@@ -8,7 +8,7 @@
     @if (count($featured_articles) > 0)
         @foreach ($featured_articles as $article)
              <!-- Card -->
-    <a class="group sm:flex rounded-xl" href="/article/{{$article->id}}">
+    <a class="group sm:flex rounded-xl" href="{{ auth()->check() ? '/article/'.$article->id.'' : '/login'}}">
       <div class="flex-shrink-0 relative rounded-xl overflow-hidden h-[200px] sm:w-[250px] sm:h-[350px] w-full">
         <img class="size-full absolute top-0 start-0 object-cover" src="{{ Storage::url($article->image) }}" alt="Image Description">
       </div>
