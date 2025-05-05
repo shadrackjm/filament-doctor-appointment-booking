@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AppointmentResource\Pages;
-use App\Filament\Resources\AppointmentResource\RelationManagers;
-use App\Models\Appointment;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Doctor;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Appointment;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\AppointmentResource\Pages;
+use App\Filament\Resources\AppointmentResource\RelationManagers;
 
 class AppointmentResource extends Resource
 {
@@ -23,17 +24,22 @@ class AppointmentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('doctor_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('patient_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('doctor_id')
+                ->relationship('doctor.user', 'name')
+                    ->label('Doctor Name'),                
+                Forms\Components\Select::make('patient_id')
+                    ->relationship('patient', 'name')
+                    ->label('Patient Name')
+                    ->required(),
                 Forms\Components\DatePicker::make('appointment_date')
                     ->required(),
-                Forms\Components\TextInput::make('appointment_time')
+                Forms\Components\TimePicker::make('appointment_time')
                     ->required(),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'complete' => 'Completed',
+                        'in-complete' => 'In-Complete',
+                    ])
                     ->required(),
             ]);
     }

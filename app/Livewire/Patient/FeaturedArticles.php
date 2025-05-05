@@ -10,7 +10,9 @@ class FeaturedArticles extends Component
 
     public function getFeaturedArticles()
     {
-        $this->featured_articles = \App\Models\Article::where('is_featured', true)->get()->shuffle()->take(2);
+        $this->featured_articles = \App\Models\Article::where('is_featured', true)
+        ->where('status', 'published')
+        ->get()->shuffle()->take(2);
         return $this->featured_articles;
     }
     public function render()

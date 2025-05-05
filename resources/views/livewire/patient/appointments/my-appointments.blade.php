@@ -110,7 +110,7 @@
                           </td>
                           <td class="size-px whitespace-nowrap align-top">
                             <div class="block p-6" >
-                              @if($appointment->complete)
+                              @if($appointment->status == 'complete')
                               <span class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                 <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
@@ -135,12 +135,12 @@
                                     </svg>
   
                                 </button> --}}
-                                    <a href="/reschedule/{{$appointment->id}}" class="bg-blue-500 rounded text-white p-1">
+                                    <a href="{{ $appointment->status == 'complete' ? '#' : '/reschedule/'.$appointment->id.'' }}" class="bg-blue-500 rounded text-white p-1">
                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                       <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                       </svg>
                                     </a>
-                              <button class="bg-red-500 rounded text-white p-1 ml-3" wire:click="cancel({{$appointment->id}})" wire:confirm="Are you really want to cancel the appointment?">
+                              <button class="bg-red-500 rounded text-white p-1 ml-3" {{ $appointment->status == 'complete' ? 'disabled' : '' }}  wire:click="cancel({{$appointment->id}})" wire:confirm="Are you really want to cancel the appointment?">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>

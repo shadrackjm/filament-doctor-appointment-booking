@@ -24,17 +24,24 @@ class AppointmentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('doctor_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('patient_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('doctor_id')
+                ->relationship('doctor.user', 'name')
+                    ->label('Doctor Name')                
+                    ->disabled()
+                    ->default(Doctor::where('user_id', auth()->user()->id)->first()->id),
+                Forms\Components\Select::make('patient_id')
+                    ->relationship('patient', 'name')
+                    ->label('Patient Name')
+                    ->required(),
                 Forms\Components\DatePicker::make('appointment_date')
                     ->required(),
-                Forms\Components\TextInput::make('appointment_time')
+                Forms\Components\TimePicker::make('appointment_time')
                     ->required(),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'complete' => 'Completed',
+                        'in-complete' => 'In-Complete',
+                    ])
                     ->required(),
             ]);
     }

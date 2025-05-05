@@ -25,30 +25,24 @@ class ArticleResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->required(),
-                Forms\Components\Textarea::make('content')
+                Forms\Components\RichEditor::make('content')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('author')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('category')
                     ->required(),
                 Forms\Components\FileUpload::make('image')
-                    ->disk('public')
-                    ->directory('articles')
-                    ->preserveFilenames()
-                    ->enableOpen()
                     ->image(),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'archived' => 'Archived',
+                    ])
+                    ->default('draft')
                     ->required(),
-                Forms\Components\TextInput::make('views')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\TextInput::make('likes')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
+                Forms\Components\Toggle::make('is_featured')
+                    ->label('Featured')
+                    ->default(false),
             ]);
     }
 
@@ -58,7 +52,7 @@ class ArticleResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('author')
+                Tables\Columns\TextColumn::make('author.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('category')
