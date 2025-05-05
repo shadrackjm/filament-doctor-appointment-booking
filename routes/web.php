@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
+Route::get('/all/doctors', \App\Livewire\AllDoctors::class)->name('doctors');
 Route::get('booking/page/{id}', BookingComponent::class);
 
 Route::get('/my-appointments',MyAppointments::class)->name('appointments');

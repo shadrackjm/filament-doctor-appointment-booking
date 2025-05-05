@@ -3,6 +3,7 @@
 namespace App\Livewire\Patient\Booking;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Livewire\Component;
@@ -11,7 +12,8 @@ use Masmerise\Toaster\Toast;
 use App\Models\DoctorSchedule;
 use Masmerise\Toaster\Toaster;
 use Illuminate\Support\Facades\Auth;
-
+use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
 class BookingComponent extends Component
 {
     public $doctor_details;
@@ -19,11 +21,17 @@ class BookingComponent extends Component
     public $selectedDate;
     public $availableDates = [];
     public $timeSlots = [];
+    public $recepient_doctor;
+    public $recepient_admin;
     public function mount($id)
     {
         $this->doctor_details = Doctor::find($id);
 
         $this->fetchAvailableDates($this->doctor_details);
+
+        $this->recepient_admin = User::where('role', 'admin')->first();
+        $this->recepient_doctor = User::find($this->doctor_details->user->id);
+        // dd($this->recepient_admin, $this->recepient_doctor);
     }
 
     public function fetchAvailableDates($doctor)
@@ -123,7 +131,16 @@ class BookingComponent extends Component
         // ];
         // dd($appointmentEmailData);
         // $this->sendAppointmentNotification($appointmentEmailData);
+        $recipient = [$this->recepient_doctor, $this->recepient_admin];
 
+        Notification::make()
+        ->title('New Appointment')
+        ->body('A new Appointment with Dr.'.$this->doctor_details->user->name.' on '.$this->selectedDate.' at '.$slot.' was created!')
+        ->actions([
+            Action::make('Mark as Read')
+                ->markAsRead(),
+        ])
+        ->sendToDatabase($recipient);
         // session()->flash('message','appointment with Dr.'.$this->doctor_details->doctorUser->name.' on '.$this->selectedDate.$slot.' was created!');
         Toaster::success('Appointment with Dr.'.$this->doctor_details->user->name.' on '.$this->selectedDate.' at '.$slot.' was created!');
         return $this->redirect('/my-appointments');

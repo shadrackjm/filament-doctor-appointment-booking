@@ -5,7 +5,7 @@
       </div>
       Processing..</div>
       <!-- Card Blog -->
-  <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-10 bg-white border my-2  shadow-md">
+  <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-10 bg-white dark:bg-neutral-700 dark:border-gray-600 border my-2  shadow-md rounded-md">
      <!-- Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
       <div class="text-center">

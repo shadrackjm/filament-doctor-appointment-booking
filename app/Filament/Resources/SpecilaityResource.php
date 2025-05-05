@@ -17,7 +17,7 @@ class SpecilaityResource extends Resource
 {
     protected static ?string $model = Specilaity::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
 
     public static function form(Form $form): Form
     {

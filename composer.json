@@ -8,6 +8,8 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^3.3",
+        "filament/notifications": "^3.3",
+        "flowframe/laravel-trend": "^0.4.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.1.1",
