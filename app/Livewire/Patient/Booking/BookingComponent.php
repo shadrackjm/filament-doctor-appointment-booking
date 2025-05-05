@@ -11,9 +11,12 @@ use App\Models\Appointment;
 use Masmerise\Toaster\Toast;
 use App\Models\DoctorSchedule;
 use Masmerise\Toaster\Toaster;
+use App\Mail\AppointmentCreated;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
+
 class BookingComponent extends Component
 {
     public $doctor_details;
@@ -118,19 +121,18 @@ class BookingComponent extends Component
         $newAppointment->appointment_type = $this->appointment_type;
         $newAppointment->save();
 
-        // $appointmentEmailData = [
-        //     'date' => $this->selectedDate,
-        //     'time' => Carbon::parse($slot)->format('H:i A'),
-        //     'location' => '123 Medical Street, Health City',
-        //     'patient_name' => auth()->user()->name,
-        //     'patient_email' => auth()->user()->email,
-        //     'doctor_name' => $this->doctor_details->user->name,
-        //     'doctor_email' => $this->doctor_details->user->email,
-        //     'appointment_type' => $this->appointment_type == 0 ? 'on-site' : 'live consultation',
-        //     'doctor_specialization' => $this->doctor_details->speciality->name,
-        // ];
-        // dd($appointmentEmailData);
-        // $this->sendAppointmentNotification($appointmentEmailData);
+        $appointmentEmailData = [
+            'date' => $this->selectedDate,
+            'time' => Carbon::parse($slot)->format('H:i A'),
+            'location' => '123 Medical Street, Health City',
+            'patient_name' => auth()->user()->name,
+            'patient_email' => auth()->user()->email,
+            'doctor_name' => $this->doctor_details->user->name,
+            'doctor_email' => $this->doctor_details->user->email,
+            'appointment_type' => $this->appointment_type == 0 ? 'on-site' : 'live consultation',
+            'doctor_specialization' => $this->doctor_details->speciality->name,
+        ];
+        $this->sendAppointmentNotification($appointmentEmailData);
         $recipient = [$this->recepient_doctor, $this->recepient_admin];
 
         Notification::make()
@@ -144,6 +146,26 @@ class BookingComponent extends Component
         // session()->flash('message','appointment with Dr.'.$this->doctor_details->doctorUser->name.' on '.$this->selectedDate.$slot.' was created!');
         Toaster::success('Appointment with Dr.'.$this->doctor_details->user->name.' on '.$this->selectedDate.' at '.$slot.' was created!');
         return $this->redirect('/my-appointments');
+    }
+
+    public function sendAppointmentNotification($appointmentData)
+    {
+        // Send to Admin
+        $appointmentData['recipient_name'] = 'Admin Admin';
+        $appointmentData['recipient_role'] = 'admin';
+        Mail::to('shadrack@mballahrise.com')->queue(new AppointmentCreated($appointmentData));
+
+        // Send to Doctor
+        $appointmentData['recipient_name'] = $appointmentData['doctor_name'];
+        $appointmentData['recipient_role'] = 'doctor';
+        Mail::to($appointmentData['doctor_email'])->queue(new AppointmentCreated($appointmentData));
+
+        // Send queue Patient
+        $appointmentData['recipient_name'] = $appointmentData['patient_name'];
+        $appointmentData['recipient_role'] = 'patient';
+        Mail::to($appointmentData['patient_email'])->queue(new AppointmentCreated($appointmentData));
+
+        return 'Appointment notifications sent successfully!';
     }
     public function render()
     {

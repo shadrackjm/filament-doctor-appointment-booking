@@ -28,4 +28,6 @@ Route::get('booking/page/{id}', BookingComponent::class);
 Route::get('/my-appointments',MyAppointments::class)->name('appointments');
 
 Route::get('/reschedule/{appointment_id}', \App\Livewire\Patient\Appointments\RescheduleForm::class)->name('reschedule');
+
+Route::get('/article/{id}', \App\Livewire\ArticlePage::class)->name('article.page');
 require __DIR__.'/auth.php';

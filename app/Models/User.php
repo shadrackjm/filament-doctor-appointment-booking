@@ -34,6 +34,10 @@ class User extends Authenticatable
     public function patient(){
         return $this->hasOne(Patient::class);
     }
+
+    public function articles(){
+        return $this->hasMany(Article::class,'author_id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

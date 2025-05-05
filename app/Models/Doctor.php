@@ -26,4 +26,6 @@ class Doctor extends Model
         return $this->belongsTo(Specilaity::class);
     }
 
+   
+
 }

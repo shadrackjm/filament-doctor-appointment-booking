@@ -7,6 +7,8 @@ use Livewire\Component;
 use App\Models\Appointment;
 use App\Models\DoctorSchedule;
 use Masmerise\Toaster\Toaster;
+use App\Mail\AppointmentUpdated;
+use Illuminate\Support\Facades\Mail;
 
 class RescheduleForm extends Component
 {
@@ -32,22 +34,23 @@ class RescheduleForm extends Component
             'appointment_time' => $slot,
         ]);
         
-        // $appointmentEmailData = [
-        //     'old_date' => $this->appointment_details->appointment_date,
-        //     'old_time' => $this->appointment_details->appointment_time,
-        //     'date' => $this->selectedDate,
-        //     'time' => Carbon::parse($slot)->format('H:i A'),
-        //     'location' => '123 Medical Street, Health City',
-        //     'patient_name' => auth()->user()->name,
-        //     'patient_email' => auth()->user()->email,
-        //     'doctor_name' => $this->doctor_details->doctorUser->name,
-        //     'doctor_email' => $this->doctor_details->doctorUser->email,
-        //     'doctor_specialization' => $this->doctor_details->speciality->speciality_name,
-        // ];
+        $appointmentEmailData = [
+            'old_date' => $this->appointment_details->appointment_date,
+            'old_time' => $this->appointment_details->appointment_time,
+            'date' => $this->selectedDate,
+            'time' => Carbon::parse($slot)->format('H:i A'),
+            'location' => '123 Medical Street, Health City',
+            'patient_name' => auth()->user()->name,
+            'patient_email' => auth()->user()->email,
+            'doctor_name' => $this->doctor_details->user->name,
+            'doctor_email' => $this->doctor_details->user->email,
+            'doctor_specialization' => $this->doctor_details->speciality->speciality_name,
+        ];
 
-        // $this->sendAppointmentNotification($appointmentEmailData);
-            Toaster::success('Appointment with Dr.'.$this->doctor_details->user->name.' on '.$this->selectedDate.' at '.$slot.' was updated!');
-            return $this->redirect('/my-appointments');
+        $this->sendAppointmentNotification($appointmentEmailData);
+
+        Toaster::success('Appointment with Dr.'.$this->doctor_details->user->name.' on '.$this->selectedDate.' at '.$slot.' was updated!');
+        return $this->redirect('/my-appointments');
         
     }
      public function fetchAvailableDates($doctor)
@@ -122,25 +125,25 @@ class RescheduleForm extends Component
         }
     }
 
-    // public function sendAppointmentNotification($appointmentData)
-    // {
-    //     // Send to Admin
-    //     $appointmentData['recipient_name'] = 'Admin Admin';
-    //     $appointmentData['recipient_role'] = 'admin';
-    //     Mail::to('admin@example.com')->send(new AppointmentUpdated($appointmentData));
+    public function sendAppointmentNotification($appointmentData)
+    {
+        // Send to Admin
+        $appointmentData['recipient_name'] = 'Admin Admin';
+        $appointmentData['recipient_role'] = 'admin';
+        Mail::to('shadrack@mballahrise.com')->queue(new AppointmentUpdated($appointmentData));
 
-    //     // Send to Doctor
-    //     $appointmentData['recipient_name'] = $appointmentData['doctor_name'];
-    //     $appointmentData['recipient_role'] = 'doctor';
-    //     Mail::to($appointmentData['doctor_email'])->send(new AppointmentUpdated($appointmentData));
+        // queue to Doctor
+        $appointmentData['recipient_name'] = $appointmentData['doctor_name'];
+        $appointmentData['recipient_role'] = 'doctor';
+        Mail::to($appointmentData['doctor_email'])->queue(new AppointmentUpdated($appointmentData));
 
-    //     // Send to Patient
-    //     $appointmentData['recipient_name'] = $appointmentData['patient_name'];
-    //     $appointmentData['recipient_role'] = 'patient';
-    //     Mail::to($appointmentData['patient_email'])->send(new AppointmentUpdated($appointmentData));
+        // queue to Patient
+        $appointmentData['recipient_name'] = $appointmentData['patient_name'];
+        $appointmentData['recipient_role'] = 'patient';
+        Mail::to($appointmentData['patient_email'])->queue(new AppointmentUpdated($appointmentData));
 
-    //     return 'Appointment notifications sent successfully!';
-    // }
+        return 'Appointment notifications sent successfully!';
+    }
     public function render()
     {
         return view('livewire.patient.appointments.reschedule-form');
